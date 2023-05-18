@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+	function login(){
+	
+// 	    $.ajax({
+// 	           type: "POST",
+// 	           url: "/user/login",
+// 	           contentType:"application/json",
+// 	           dataType:"json",
+// 	           success: function(result){
+// 		        	 if(result.code == 0){
+// 		        		 window.location.href="/";
+// 		        	 }else{
+// 		            	 alert('操作出错：' + result.message);
+// 		        	 }
+// 		         },
+// 	         error: function(result){
+// 	        	 alert('操作出错：' + result.message);
+// 	         }
+// 	    });
+	}
+
+</script> 
+
+<style type="text/css">
+body {
+	background-color: #81D8D0;
+	margin: 4px;
+	padding-top: 50px;
+	padding-left: 200px;
+	padding-right: 200px;
+	padding-bottom: 50px;
+	border: 5px;
+	font-size: 18px;
+}
+p {
+	color: gray;
+	font-size: 18px;
+}
+
+li {
+	list-style-type: none;
+	padding: 3px;
+	margin: 3px;
+	display: inline-block;
+	border: 1px solid gray;
+	background-color: pink;
+	box-shadow: 8px 8px 16px 6px rgba(0, 0, 0.1, 0.5);
+}
+
+a {
+/* 	font-size: 32px; */
+	color: white
+}
+
+a:hover {
+/* 	background-color: green; */
+	color: green;
+}
+
+a.beian {
+/* 	font-size: 20px; */
+	color: white
+}
+
+div.page {
+	background-color: #D1DFD0;
+	border: 2px solid gray;
+	box-shadow: 8px 8px 16px 6px rgba(0, 0, 0.1, 0.8);
+}
+
+div.daohang {
+	display: block;
+	height: 10%;
+}
+
+div.user {
+	text-align: right;	
+}
+
+div.content {
+	display: block;
+	padding-top: 2%;
+}
+
+div.daohang p {
+	display: inline;
+}
+
+p.left {
+	float: right;
+}
+
+button {
+	background-color: pink;
+	border: 2px solid gray;;
+	width: 100px;
+	height: 30px;
+	color: white;
+	padding: 4px 3px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+input {
+	height: 30px;
+	width: 200px;
+}
+
+table {
+	border: 2px solid gray;;
+}
+table tr {
+	border: 2px solid gray;;
+}
+table tr td {
+	border: 2px solid gray;;
+}
+
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>请修改此内容</title>
+</head>
+
+<body>
+
+	<div class="user">
+		<#if user_login??>
+			欢迎用户 
+			<a href="/user/center" target="_blank">${user_login.name} </a>
+			<!-- FIXME 使用ajax ，注销后跳转到index页 -->
+			<a href="/user/logout" target="#">退出</a>
+		<#else>
+			<a href="/user/tologin"><input type="button" value='登录'></a>
+		</#if>
+	</div>
+	
+	<div class="content">
+		<h1> 请修改此内容 </h1>
+	</div>
+	
+	<div>
+<!-- 		<table> -->
+<!-- 			<tr> -->
+<!-- 				<td>记录ID</td><td>用户ID</td><td>牌桌ID</td><td>记录内容</td><td>创建时间</td> -->
+<!-- 				<td>操作</td> -->
+<!-- 			</tr> -->
+<!-- 			<#list gameList as aa> -->
+<!-- 				<tr> -->
+<!-- 					<td>${aa.id}</td> -->
+<!-- 					<td>${aa.userId}</td> -->
+<!-- 					<td>${aa.tableId}</td> -->
+<!-- 					<td>${aa.content}</td> -->
+<!-- 					<td>${aa.createTime}</td> -->
+<!-- 					<td> -->
+<!-- 						<a href="/product/detail?id=${aa.id}" target="_blank">查看详情</a> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 			</#list> -->
+		
+<!-- 		</table> -->
+	</div>
+
+</body>
+
+</html>

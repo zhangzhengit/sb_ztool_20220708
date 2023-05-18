@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+</script> 
+
+<style type="text/css">
+body {
+	background-color: #81D8D0;
+	margin: 4px;
+	padding-top: 50px;
+	padding-left: 200px;
+	padding-right: 200px;
+	padding-bottom: 50px;
+	border: 5px;
+	font-size: 20px;
+}
+p {
+	color: rgb(0, 0, 64);
+	font-size: 22px;
+}
+
+li {
+	list-style-type: none;
+	padding: 0px;
+	margin: 1px;
+	display: inline-block;
+	border: 1px solid gray;
+/* 	border: 1px solid #81D8D0; */
+	background-color: rgb(255, 192, 203);
+	box-shadow: 8px 8px 16px 6px rgba(0, 0, 0.1, 0.5);
+}
+
+a {
+/* 	font-size: 32px; */
+	color: white
+}
+
+a:hover {
+/* 	background-color: green; */
+	color: green;
+}
+
+a.beian {
+/* 	font-size: 20px; */
+	color: white
+}
+
+div.page {
+	background-color: #D1DFD0;
+	border: 2px solid gray;
+	box-shadow: 8px 8px 16px 6px rgba(0, 0, 0.1, 0.8);
+}
+
+div.daohang {
+	display: block;
+	height: 10%;
+}
+
+div.user {
+	text-align: right;	
+}
+
+div.content {
+	display: block;
+	padding-top: 2%;
+}
+
+div.daohang p {
+	display: inline;
+}
+
+p.left {
+	float: right;
+}
+
+button {
+	background-color: pink;
+	border: 2px solid gray;;
+	width: 100px;
+	height: 30px;
+	color: white;
+	padding: 4px 3px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+input {
+	height: 30px;
+	width: 200px;
+}
+
+table {
+	border: 2px solid gray;;
+}
+table tr {
+	border: 2px solid gray;;
+}
+table tr td {
+	border: 2px solid gray;;
+}
+
+label.t{
+	color: rgb(74, 105, 251);
+}
+.method{
+	background-color:  rgb(192, 192, 192);
+	color:black;
+}
+
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>apidoc-API列表</title>
+</head>
+
+<body>
+
+	<div class="content">
+		<h1>apidoc-API列表</h1>
+	</div>
+	
+	<div>
+		<table>
+			<#list apiClassList as aa>
+				<h1>${aa.className}</h1>
+				<hr/>
+				<#list aa.apiList as aa1>
+<!-- 					<h3>${aa1.method}</h3> -->
+					<li>
+						<#if aa1.requestValues?size gt 0>
+							<#list aa1.requestValues as r>
+								<label class ="method">
+									${aa1.requestMethod}
+								</label>
+								&nbsp;
+								 ${r}
+								<br/>
+							</#list>
+						<#else>
+							<label class ="method">
+								${aa1.requestMethod}
+							</label>
+						</#if>
+					</li>
+					
+					<p>
+						 ${aa1.modifier} ${aa1.returnType} ${aa1.name}(
+							 <#list aa1.paramList as p>
+								${p.annoName} ${p.type} ${p.name}
+								<#if p_index lt aa1.paramList?size -1>
+									,
+								</#if>		
+						     </#list>
+						 )
+					</p>
+					
+					<#list aa1.paramList as p>
+						${p.annoName} ${p.type} ${p.name}
+					 	<br/>
+				     </#list>
+				     <br/>
+				     <p>返回值示例</p>
+				    <h3>${aa1.returnType}
+				    	<#if aa1.apiReturnTypeClassInfo??>
+					    	<label class = "t">
+						    	<br/> ${aa1.apiReturnTypeClassInfo.json}		
+					    	</label>
+				    	</#if>
+				     </h3>
+				     <#if aa1.returnType == aa1.returnTypeT>
+					 <#else>
+						 <h3>${aa1.returnTypeT} 
+					    	<#if aa1.apiReturnTypeClassInfo.t??>
+						    	<label class = "t">
+									<br/> ${aa1.apiReturnTypeClassInfo.t.json}
+						    	</label>
+					    	</#if>
+						 </h3>	
+				     </#if>
+					<hr/>
+				
+				</#list>
+			</#list>
+		</table>
+	</div>
+
+</body>
+
+</html>
