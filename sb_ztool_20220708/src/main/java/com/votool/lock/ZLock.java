@@ -155,8 +155,9 @@ public class ZLock {
 	/**
 	 * 解锁
 	 *
-	 * @param key
-	 * @return
+	 * @param key 传入与lock()方法的参数key相同的值来解锁
+	 * @return @see genV 方法，只有加锁的那个线程（同一个机器节点上的同一个应用实例的同一线程）才可以成功解锁
+	 *
 	 *
 	 */
 	public boolean unlock(final String key) {
