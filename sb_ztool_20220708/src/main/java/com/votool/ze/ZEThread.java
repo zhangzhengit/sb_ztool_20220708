@@ -13,6 +13,7 @@ import com.google.common.collect.TreeMultiset;
 import cn.hutool.core.lang.UUID;
 import lombok.Getter;
 import lombok.Setter;
+import reactor.core.Fuseable.SynchronousSubscription;
 
 /**
  * 一个线程
@@ -23,7 +24,7 @@ import lombok.Setter;
  */
 final class ZEThread<T> extends Thread {
 
-	private static final int WAIT_TIMEOUT = 5;
+	private static final int WAIT_TIMEOUT = 1;
 
 	@Getter
 	private final String groupName;
@@ -49,7 +50,7 @@ final class ZEThread<T> extends Thread {
 	 * 此线程是否被分配了【按关键字执行】的任务
 	 */
 	// FIXME 2022年12月5日 下午7:48:08 zhanghen: 执行结束set false
-	private final  AtomicBoolean executedByName = new AtomicBoolean(false);
+	private final AtomicBoolean executedByName = new AtomicBoolean(false);
 
 	/**
 	 * 被分配到此线程的任务数量
@@ -168,15 +169,17 @@ final class ZEThread<T> extends Thread {
 			} else {
 
 				while (true) {
-
-					final ZE ze = ZEGMap.get(this.getGroupName());
-					ze.reassign(this);
-
 					final ZETask<T> newTask = ZEThread.this.taskDeque.pollFirst();
 					if (newTask == null) {
 						// 当前已无任务，打破此循环，开始下一次外部循环.
 						this.setExecutedByName(false);
 						break;
+					}
+
+					final ZE ze = ZEGMap.get(this.getGroupName());
+					if (!this.isExecutedByName()) {
+						// FIXME byName方法，上面判断不生效？
+//						ze.reassign(this);
 					}
 
 					this.task(newTask);

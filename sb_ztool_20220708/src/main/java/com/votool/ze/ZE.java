@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
@@ -740,7 +741,7 @@ public class ZE {
 	 * @return 返回值表示此任务是否被安排进入了执行，一定返回true
 	 *
 	 */
-	private <T> boolean executeByNameInASpecificThread_0(final String keyword, final ZETask<T> zeTask,
+	private synchronized <T> boolean executeByNameInASpecificThread_0(final String keyword, final ZETask<T> zeTask,
 			final boolean priorityTask) {
 
 		if (this.isTerminated.get()) {
@@ -750,14 +751,14 @@ public class ZE {
 		// 1 已有对应线程，用对应线程来执行
 		final ZEThread z = this.nameMap.get(keyword);
 		if (z != null) {
-			ZE.addTask0(z, zeTask, priorityTask);
+			ZE.addTask0(z, zeTask, priorityTask, true);
 			return true;
 		}
 
 		if (this.isSingleThreadPool()) {
 			// 唯一的线程来执行
 			final ZEThread firstThread = this.getFirstThread();
-			ZE.addTask0(firstThread, zeTask, priorityTask);
+			ZE.addTask0(firstThread, zeTask, priorityTask, true);
 			return true;
 		}
 
@@ -765,7 +766,7 @@ public class ZE {
 		final Optional<ZEThread> o = this.zetList.stream().filter(zet -> !zet.isBusy()).findFirst();
 		if (o.isPresent()) {
 			final ZEThread t = o.get();
-			ZE.addTask0(t, zeTask, priorityTask);
+			ZE.addTask0(t, zeTask, priorityTask, true);
 			this.nameMap.put(keyword, t);
 			t.setExecutedByName(true);
 			return true;
@@ -781,19 +782,22 @@ public class ZE {
 			.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
 			.collect(Collectors.toList());
 		if (minTQTList.size() <= 1) {
-			ZE.addTask0(minTaskQueueThread, zeTask, priorityTask);
+			ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, true);
 			return true;
 		}
 
 		// 4 取多个任务队列最小的中的平均耗时最短的一个
 		final Optional<ZEThread> minATCThreadOptional = this.minAverageTimeConsumption(minTQTList);
 		final ZEThread minATCThread = minATCThreadOptional.get();
-		ZE.addTask0(minATCThread, zeTask, priorityTask);
+		ZE.addTask0(minATCThread, zeTask, priorityTask, true);
 		return true;
 	}
 
-	private static <T> void addTask0(final ZEThread thread, final ZETask<T> task, final boolean priorityTask) {
+	private static <T> void addTask0(final ZEThread thread, final ZETask<T> task, final boolean priorityTask, final boolean executedByName) {
 		thread.addTask(task, priorityTask);
+		if (executedByName) {
+			thread.setExecutedByName(true);
+		}
 	}
 
 	/**
@@ -817,7 +821,7 @@ public class ZE {
 			if (this.isSingleThreadPool()) {
 				// 唯一的线程来执行
 				final ZEThread firstThread = this.getFirstThread();
-				ZE.addTask0(firstThread, zeTask, priorityTask);
+				ZE.addTask0(firstThread, zeTask, priorityTask, false);
 				return true;
 			}
 
@@ -830,7 +834,7 @@ public class ZE {
 						.filter(zet -> !zet.isBusy()).findFirst();
 			if (idleThreadOptional.isPresent()) {
 				final ZEThread idleThread = idleThreadOptional.get();
-				ZE.addTask0(idleThread, zeTask, priorityTask);
+				ZE.addTask0(idleThread, zeTask, priorityTask, false);
 				return true;
 			}
 
@@ -846,14 +850,14 @@ public class ZE {
 				.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
 				.collect(Collectors.toList());
 			if (minTQTList.size() <= 1) {
-				ZE.addTask0(minTaskQueueThread, zeTask, priorityTask);
+				ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, false);
 				return true;
 			}
 
 			// 3 取多个任务队列最小的中的平均耗时最短的一个
 			final Optional<ZEThread> minATCThreadOptional = this.minAverageTimeConsumption(minTQTList);
 			final ZEThread minATCThread = minATCThreadOptional.get();
-			ZE.addTask0(minATCThread, zeTask, priorityTask);
+			ZE.addTask0(minATCThread, zeTask, priorityTask, false);
 			return true;
 		}
 
@@ -863,7 +867,7 @@ public class ZE {
 			if (firstThread.isBusy()) {
 				return false;
 			}
-			ZE.addTask0(firstThread, zeTask, priorityTask);
+			ZE.addTask0(firstThread, zeTask, priorityTask, false);
 			return true;
 		}
 
@@ -877,7 +881,7 @@ public class ZE {
 		final ZEThread zet = o.get();
 		zet.setBusy(true);
 
-		ZE.addTask0(zet, zeTask, priorityTask);
+		ZE.addTask0(zet, zeTask, priorityTask, false);
 
 		return true;
 	}
