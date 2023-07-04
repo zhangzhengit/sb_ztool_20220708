@@ -771,6 +771,16 @@ public class ZE {
 			t.setExecutedByName(true);
 			return true;
 		}
+		if (this.newThread()) {
+			final Optional<ZEThread> o2 = this.zetList.stream().filter(zet -> !zet.isBusy()).findFirst();
+			if (o2.isPresent()) {
+				final ZEThread t = o2.get();
+				ZE.addTask0(t, zeTask, priorityTask, true);
+				this.nameMap.put(keyword, t);
+				t.setExecutedByName(true);
+				return true;
+			}
+		}
 
 		// 3 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
 		final Optional<ZEThread> minTaskQueueThreadOptional = this.zetList.stream()
@@ -836,6 +846,20 @@ public class ZE {
 				final ZEThread idleThread = idleThreadOptional.get();
 				ZE.addTask0(idleThread, zeTask, priorityTask, false);
 				return true;
+			}
+			// 1.1 无空闲线程，则先创建一个线程再找空闲线程
+			if (this.newThread()) {
+				final Optional<ZEThread> idleThreadOptional2 = this.zetList.stream()
+						// 不要分配到按关键字执行的线程中去，就让按关键字执行的线程只知悉关键字对应的任务
+						// 能到此说明是非单线程的池，则优先寻找非按关键字执行的线程
+						.filter(zet -> !zet.isExecutedByName())
+						// findFirst 按List前后顺序来找
+						.filter(zet -> !zet.isBusy()).findFirst();
+				if (idleThreadOptional2.isPresent()) {
+					final ZEThread idleThread = idleThreadOptional2.get();
+					ZE.addTask0(idleThread, zeTask, priorityTask, false);
+					return true;
+				}
 			}
 
 			// 2 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
@@ -1071,6 +1095,18 @@ public class ZE {
 		to.addTask((ZETask) pollFirst, true);
 	}
 
+	/**
+	 * 获取当前已创建的线程数量
+	 *
+	 * @return
+	 *
+	 */
+	public int getThreadSize() {
+		return this.zetList.size();
+	}
+
+	private final AtomicInteger threadNum = new AtomicInteger(0);
+
 	public ZE(final int threadSize, final String groupName, final String threadNamePrefix) {
 
 		final int size = threadSize <= 0 ? Runtime.getRuntime().availableProcessors() : threadSize;
@@ -1079,13 +1115,28 @@ public class ZE {
 		this.groupName = StrUtil.isEmpty(groupName) ? DEFAULT_GROUP_NAME_PREFIX : groupName;
 		this.threadNamePrefix = StrUtil.isEmpty(threadNamePrefix) ? ZEThread.PREFIX : threadNamePrefix;
 
-		for (int i = 1; i <= this.threadSize; i++) {
+		this.newThread();
+	}
 
-			final String threadName = this.threadNamePrefix + i;
-			final ZEThread zet = new ZEThread<>(false, this.groupName, threadName);
+	/**
+	 * 新建一个线程，如果当前线程数量还没达到threadSize，则创建并返回true，否则不创建并返回false
+	 *
+	 * @return
+	 *
+	 */
+	private synchronized boolean newThread() {
 
-			zet.start();
-			this.zetList.add(zet);
+		final int n = this.threadNum.incrementAndGet();
+		if (n > this.threadSize) {
+			return false;
 		}
+		final String threadName = this.threadNamePrefix + n;
+		System.out.println(
+				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "ZE.newThread() - name = " + threadName);
+		final ZEThread zet = new ZEThread<>(false, this.groupName, threadName);
+		zet.start();
+		this.zetList.add(zet);
+
+		return true;
 	}
 }
