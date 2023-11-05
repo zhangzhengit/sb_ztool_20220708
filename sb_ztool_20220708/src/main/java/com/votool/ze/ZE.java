@@ -1131,8 +1131,6 @@ public class ZE {
 			return false;
 		}
 		final String threadName = this.threadNamePrefix + n;
-		System.out.println(
-				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "ZE.newThread() - name = " + threadName);
 		final ZEThread zet = new ZEThread<>(false, this.groupName, threadName);
 		zet.start();
 		this.zetList.add(zet);
