@@ -43,14 +43,14 @@ public class AES {
 	 * @param plainText
 	 * @param secretKey
 	 * @return
+	 * @throws Exception
 	 *
 	 */
-	public static String encrypt(final String plainText, final String secretKey) {
-		final String encrypt = encrypt(plainText.getBytes(), secretKey);
-		return encrypt;
+	public static String encrypt(final String plainText, final String secretKey) throws Exception {
+		return encrypt(plainText.getBytes(), secretKey);
 	}
 
-	public static String encrypt(final byte[] byteArray , final String secretKey) {
+	public static String encrypt(final byte[] byteArray , final String secretKey) throws Exception {
 		try {
 			final Key key = generateKey(secretKey);
 			final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
@@ -59,8 +59,8 @@ public class AES {
 			return Base64.getEncoder().encodeToString(encryptedBytes);
 		} catch (final Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
-		return null;
 	}
 
 	/**
@@ -69,9 +69,10 @@ public class AES {
 	 * @param encryptedText
 	 * @param secretKey
 	 * @return
+	 * @throws Exception
 	 *
 	 */
-	public static String decrypt(final String encryptedText, final String secretKey) {
+	public static String decrypt(final String encryptedText, final String secretKey) throws Exception {
 		try {
 			final Key key = generateKey(secretKey);
 			final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
@@ -81,8 +82,8 @@ public class AES {
 			return new String(decryptedBytes);
 		} catch (final Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
-		return null;
 	}
 
 	/**

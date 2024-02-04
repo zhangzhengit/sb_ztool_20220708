@@ -45,7 +45,7 @@ public class DH {
 //	}
 
 
-	public static void test_dh1() {
+	public static void test_dh1() throws Exception {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "DH.test_dh1()");
 
