@@ -32,19 +32,23 @@ public class ZES {
 		return newZE(Runtime.getRuntime().availableProcessors(), threadNamePrefix);
 	}
 
+	public static ZE newZE(final int size, final String threadNamePrefix,final ThreadModeEnum threadMode) {
+		final String groupName = ggn(num.incrementAndGet());
+		return newZE(size, groupName,threadNamePrefix, threadMode);
+
+	}
+
 	public static ZE newZE(final int size, final String threadNamePrefix) {
 		final String groupName = ggn(num.incrementAndGet());
-		return newZE(size, groupName,threadNamePrefix);
+		return newZE(size, groupName,threadNamePrefix, ThreadModeEnum.LAZY);
 	}
 
 	public static ZE newZE(final String groupName, final String threadNamePrefix) {
-		final ZE ze = new ZE(Runtime.getRuntime().availableProcessors(), groupName, threadNamePrefix);
-		ZEGMap.put(groupName, ze);
-		return ze;
+		return newZE(Runtime.getRuntime().availableProcessors(), groupName, threadNamePrefix, ThreadModeEnum.LAZY);
 	}
 
-	public static ZE newZE(final int size, final String groupName, final String threadNamePrefix) {
-		final ZE ze = new ZE(size, groupName, threadNamePrefix);
+	public static ZE newZE(final int size, final String groupName, final String threadNamePrefix, final ThreadModeEnum threadMode) {
+		final ZE ze = new ZE(size, groupName, threadNamePrefix,threadMode);
 		ZEGMap.put(groupName, ze);
 		return ze;
 	}

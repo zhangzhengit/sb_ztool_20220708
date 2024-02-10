@@ -1107,15 +1107,32 @@ public class ZE {
 
 	private final AtomicInteger threadNum = new AtomicInteger(0);
 
-	public ZE(final int threadSize, final String groupName, final String threadNamePrefix) {
-
+	public ZE(final int threadSize, final String groupName, final String threadNamePrefix,
+			final ThreadModeEnum threadMode) {
 		final int size = threadSize <= 0 ? Runtime.getRuntime().availableProcessors() : threadSize;
 
 		this.threadSize = size;
 		this.groupName = StrUtil.isEmpty(groupName) ? DEFAULT_GROUP_NAME_PREFIX : groupName;
 		this.threadNamePrefix = StrUtil.isEmpty(threadNamePrefix) ? ZEThread.PREFIX : threadNamePrefix;
 
-		this.newThread();
+		switch (threadMode) {
+		case IMMEDIATELY:
+			for (int i = 1; i <= this.threadSize; i++) {
+				this.newThread();
+			}
+			break;
+
+		case LAZY:
+			this.newThread();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	public ZE(final int threadSize, final String groupName, final String threadNamePrefix) {
+		this(threadSize, groupName, threadNamePrefix, ThreadModeEnum.LAZY);
 	}
 
 	/**
