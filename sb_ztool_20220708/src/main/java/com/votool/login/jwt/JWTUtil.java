@@ -1,20 +1,11 @@
 package com.votool.login.jwt;
 
 import java.util.Date;
-import java.util.Map;
 
-import javax.validation.Valid;
-
-import org.checkerframework.checker.units.qual.degrees;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 /**
  *
