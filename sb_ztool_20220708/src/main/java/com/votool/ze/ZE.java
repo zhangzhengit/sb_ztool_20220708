@@ -789,8 +789,8 @@ public class ZE {
 		final ZEThread minTaskQueueThread = minTaskQueueThreadOptional.get();
 
 		final List<ZEThread> minTQTList = this.zetList.stream()
-			.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
-			.collect(Collectors.toList());
+				.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
+				.collect(Collectors.toList());
 		if (minTQTList.size() <= 1) {
 			ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, true);
 			return true;
@@ -837,11 +837,11 @@ public class ZE {
 
 			// 1 最优先找空闲的线程
 			final Optional<ZEThread> idleThreadOptional = this.zetList.stream()
-						// 不要分配到按关键字执行的线程中去，就让按关键字执行的线程只知悉关键字对应的任务
-						// 能到此说明是非单线程的池，则优先寻找非按关键字执行的线程
-						.filter(zet -> !zet.isExecutedByName())
-						// findFirst 按List前后顺序来找
-						.filter(zet -> !zet.isBusy()).findFirst();
+					// 不要分配到按关键字执行的线程中去，就让按关键字执行的线程只知悉关键字对应的任务
+					// 能到此说明是非单线程的池，则优先寻找非按关键字执行的线程
+					.filter(zet -> !zet.isExecutedByName())
+					// findFirst 按List前后顺序来找
+					.filter(zet -> !zet.isBusy()).findFirst();
 			if (idleThreadOptional.isPresent()) {
 				final ZEThread idleThread = idleThreadOptional.get();
 				ZE.addTask0(idleThread, zeTask, priorityTask, false);
@@ -867,12 +867,13 @@ public class ZE {
 					.filter(zet -> !zet.isExecutedByName())
 					.min(Comparator.comparing(t -> t.getTaskDeque().size()));
 
+			// FIXME 2024年12月23日 下午10:22:24 zhangzhen : 可能 没值，先判断，想好怎么做
 			final ZEThread minTaskQueueThread = minTaskQueueThreadOptional.get();
 
 			final List<ZEThread> minTQTList = this.zetList.stream()
-				.filter(zet -> !zet.isExecutedByName())
-				.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
-				.collect(Collectors.toList());
+					.filter(zet -> !zet.isExecutedByName())
+					.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
+					.collect(Collectors.toList());
 			if (minTQTList.size() <= 1) {
 				ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, false);
 				return true;
@@ -925,7 +926,7 @@ public class ZE {
 	}
 
 	private Optional<ZEThread> minAverageTimeConsumption(final List<ZEThread> zetList) {
-		return zetList.stream().min(Comparator.comparing(zet -> zet.averageTimeConsumption()));
+		return zetList.stream().min(Comparator.comparing(ZEThread::averageTimeConsumption));
 	}
 
 	/**
@@ -1033,22 +1034,18 @@ public class ZE {
 
 			// 单线程的池，不分配
 			final boolean singleThreadPool = this.isSingleThreadPool();
-			if (singleThreadPool) {
-				return false;
-			}
-
 			// empty或者就剩1个任务了，不重新分配了，就让它在原来线程中执行.
-			if (zeThread.getTaskDeque().size() <= 1) {
+			if (singleThreadPool || (zeThread.getTaskDeque().size() <= 1)) {
 				return false;
 			}
 
 			// 1 最优先找空闲的线程
 			final Optional<ZEThread> idleThreadOptional = this.zetList.stream()
-						// 不要分配到按关键字执行的线程中去，就让按关键字执行的线程只知悉关键字对应的任务
-						// 能到此说明是非单线程的池，则优先寻找非按关键字执行的线程
-						.filter(zet -> !zet.isExecutedByName())
-						// findFirst 按List前后顺序来找
-						.filter(zet -> !zet.isBusy()).findFirst();
+					// 不要分配到按关键字执行的线程中去，就让按关键字执行的线程只知悉关键字对应的任务
+					// 能到此说明是非单线程的池，则优先寻找非按关键字执行的线程
+					.filter(zet -> !zet.isExecutedByName())
+					// findFirst 按List前后顺序来找
+					.filter(zet -> !zet.isBusy()).findFirst();
 			if (idleThreadOptional.isPresent()) {
 				final ZEThread idleThread = idleThreadOptional.get();
 				this.reassign_0(zeThread, idleThread);
