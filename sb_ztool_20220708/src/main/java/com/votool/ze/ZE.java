@@ -867,7 +867,13 @@ public class ZE {
 					.filter(zet -> !zet.isExecutedByName())
 					.min(Comparator.comparing(t -> t.getTaskDeque().size()));
 
-			// FIXME 2024年12月23日 下午10:22:24 zhangzhen : 可能 没值，先判断，想好怎么做
+			if (!minTaskQueueThreadOptional.isPresent()) {
+				// FIXME 2024年12月23日 下午10:22:24 zhangzhen : 可能 没值，先判断，想好怎么做
+				// 当前线程都是byName的，则直接选第一个来执行吧
+				ZE.addTask0(this.zetList.get(0), zeTask, priorityTask, false);
+				return true;
+			}
+
 			final ZEThread minTaskQueueThread = minTaskQueueThreadOptional.get();
 
 			final List<ZEThread> minTQTList = this.zetList.stream()
