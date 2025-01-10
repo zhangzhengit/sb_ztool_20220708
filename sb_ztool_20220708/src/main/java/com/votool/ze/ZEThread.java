@@ -1,19 +1,13 @@
 package com.votool.ze;
 
-import java.util.Optional;
 import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.google.common.collect.TreeMultiset;
-
-import cn.hutool.core.lang.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import reactor.core.Fuseable.SynchronousSubscription;
 
 /**
  * 一个线程
@@ -24,7 +18,7 @@ import reactor.core.Fuseable.SynchronousSubscription;
  */
 final class ZEThread<T> extends Thread {
 
-	private static final int WAIT_TIMEOUT = 1;
+	private static final int WAIT_TIMEOUT = 100;
 
 	@Getter
 	private final String groupName;
@@ -39,7 +33,7 @@ final class ZEThread<T> extends Thread {
 	 */
 	private final BlockingDeque<ZETask<T>> taskDeque = new LinkedBlockingDeque<>();
 
-	private final String lockObject = new String(String.valueOf(UUID.randomUUID()));
+	private final Object lockObject = new Object();
 
 	/**
 	 * 标识线程执行结束
@@ -94,7 +88,6 @@ final class ZEThread<T> extends Thread {
 		// 把当前线程分配到的pollFirst的任务再 addFirst到上面找到的线程中。
 		// 来达到对于 分配到线程池中的任务正确最短时间内执行完成的效果。
 		// !!! 仅非byName执行的任务适用
-
 
 		final String canonicalName = zeTask.getClass().getName();
 		try {
@@ -155,9 +148,9 @@ final class ZEThread<T> extends Thread {
 		// 下一次循环：有任务了，则执行任务
 		// 防止死循环等待taskDeque非空导致线程空转;
 		// 也防止lock.wait()不设超时一直不释放锁导致 addTask 获取不到锁而无法执行.
+
 		while (!this.d.get()) {
 			if (this.taskDeque.isEmpty()) {
-
 				synchronized (this.lockObject) {
 					try {
 						this.lockObject.wait(WAIT_TIMEOUT);
@@ -165,7 +158,6 @@ final class ZEThread<T> extends Thread {
 						e.printStackTrace();
 					}
 				}
-
 			} else {
 
 				while (true) {
@@ -179,7 +171,7 @@ final class ZEThread<T> extends Thread {
 					final ZE ze = ZEGMap.get(this.getGroupName());
 					if (!this.isExecutedByName()) {
 						// FIXME byName方法，上面判断不生效？
-//						ze.reassign(this);
+						//						ze.reassign(this);
 					}
 
 					this.task(newTask);
@@ -211,7 +203,6 @@ final class ZEThread<T> extends Thread {
 
 			this.lockObject.notify();
 		}
-
 	}
 
 	/**
@@ -221,7 +212,7 @@ final class ZEThread<T> extends Thread {
 	 */
 	public int averageTimeConsumption() {
 
-		if (this.executedTaskCount.get() <= 0 || this.executedTaskMS.get() <= 0) {
+		if ((this.executedTaskCount.get() <= 0) || (this.executedTaskMS.get() <= 0)) {
 			return 0;
 		}
 
