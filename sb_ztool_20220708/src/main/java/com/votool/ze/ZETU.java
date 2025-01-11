@@ -54,7 +54,7 @@ class ZETU {
 		}
 
 		for (int i = minI; i < list.size(); i++) {
-			if (list.get(i).getTaskDeque().size() < minTaskQueueSizeT.getTaskDeque().size()) {
+			if (list.get(i).getTaskDequeSize() < minTaskQueueSizeT.getTaskDequeSize()) {
 				minTaskQueueSizeT = list.get(i);
 			}
 		}

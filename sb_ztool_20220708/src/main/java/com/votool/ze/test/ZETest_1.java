@@ -9,9 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.http.codec.multipart.SynchronossPartHttpMessageReader;
-import org.springframework.ui.context.Theme;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.votool.random.ZR;
@@ -35,40 +32,64 @@ import freemarker.core._ArrayEnumeration;
 public class ZETest_1 {
 
 	public static void main(final String[] args) throws InterruptedException {
-		test_callable1();
-//		test_timeoutMS1();
-//		putINtQueue_1();
-//		test_name_putIntQueue1();
-//		test_Exception1();
-//		test_Exception_interface_NOT_ERROR_1();
-//		test_ZERunnable1();
-//		test_ZETask_1();
-//		test_inqueue();
-//		test_executeByNameInASpecificThread();
-//		test_zerunnnable_1();
+		//		test_byName1();
+		//		test_callable1();
+		//		test_timeoutMS1();
+		//		putINtQueue_1();
+		//		test_name_putIntQueue1();
+		//		test_Exception1();
+		//		test_Exception_interface_NOT_ERROR_1();
+		//		test_ZERunnable1();
+		//		test_ZETask_1();
+		//		test_inqueue();
+		//		test_executeByNameInASpecificThread();
+		//		test_zerunnnable_1();
 
-//
-//		test_PriQueue_1();
-//		test_Priority_1();
-//		test_Priority_2();
-//		test_test1();
-//		test_submitTaskImmediately();
-//		test_groouName_1();
-//		test_ZET_daoqu_1();
-//		test_submitList1();
+		//
+		//		test_PriQueue_1();
+		//		test_Priority_1();
+		//		test_Priority_2();
+		//		test_test1();
+		//		test_submitTaskImmediately();
+		//		test_groouName_1();
+		//		test_ZET_daoqu_1();
+		//		test_submitList1();
 
-//		test_submitImmediatelyAndGet1();
-//		test_submitImmediatelyAndGetList1();
-//		test_submitImmediatelyAndGet2();
-//		test_arrange1();
-//		test_reassign_1();
-//		test_byName1();
-//		test_Executors_AND_ZE_1();
-//		test_Executors_AND_ZE_2();
-//		test_byName_reassign_1();
-//		test_byName_reassign_2();
-//		test_subAngGet_1();
-//		test_test_subAngGet_12();
+		//		test_submitImmediatelyAndGet1();
+		//		test_submitImmediatelyAndGetList1();
+		//		test_submitImmediatelyAndGet2();
+		//		test_arrange1();
+		//		test_reassign_1();
+		//		test_Executors_AND_ZE_1();
+		//		test_Executors_AND_ZE_2();
+		//		test_byName_reassign_1();
+		//		test_byName_reassign_2();
+		//		test_subAngGet_1();
+		//		test_test_subAngGet_12();
+		test_ByName1();
+	}
+
+	public static void test_ByName1() {
+		System.out.println(
+				Thread.currentThread().getName() + "\t" + LocalDateTime.now() + "\t" + "ZETest_1.test_ByName1()");
+
+		final ZE ze = ZES.newZE(23);
+
+		final int n = 10000 * 1 * 20
+//		final int n = 10000 * 10000 * 20
+				;
+		for(int i =1;i<=n;i++) {
+			ze.executeByNameInASpecificThread("A", () -> {
+				//				try {
+				//					Thread.sleep(5);
+				//				} catch (final InterruptedException e) {
+				//					e.printStackTrace();
+				//				}
+			});
+		}
+
+		System.out.println("n = " + n + "\t" + "END");
+
 	}
 
 	public static void test_test_subAngGet_12() {
@@ -100,9 +121,9 @@ public class ZETest_1 {
 		ze.executeInQueue(() -> {
 
 			System.out.println("rList.size = " + rList.size());
-//			for (final String string : rList) {
-//			System.out.println("\t" + string);
-////		}
+			//			for (final String string : rList) {
+			//			System.out.println("\t" + string);
+			////		}
 			System.out.println("rList.size = " + rList.size());
 		});
 
@@ -111,11 +132,11 @@ public class ZETest_1 {
 			final String v1 =
 					ze.submitInQueueAndGet(new AbstractZETask<String>() {
 
-				@Override
-				public String call() {
-					return "v1";
-				}
-			});
+						@Override
+						public String call() {
+							return "v1";
+						}
+					});
 
 			System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 					+ "v1 = " + v1);
@@ -135,13 +156,13 @@ public class ZETest_1 {
 			final String v1 =
 					ze.submitImmediatelyAndGet(new AbstractZETask<String>() {
 
-				@Override
-				public String call() {
+						@Override
+						public String call() {
 
-					sleepMS(1020);
-					return "v1";
-				}
-			});
+							sleepMS(1020);
+							return "v1";
+						}
+					});
 
 			System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 					+ "v1 = " + v1);
@@ -154,13 +175,13 @@ public class ZETest_1 {
 			final String v2 =
 					ze.submitImmediatelyAndGet(new AbstractZETask<String>() {
 
-				@Override
-				public String call() {
+						@Override
+						public String call() {
 
-					sleepMS(1020);
-					return "v2";
-				}
-			});
+							sleepMS(1020);
+							return "v2";
+						}
+					});
 
 			System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 					+ "v2 = " + v2);
@@ -182,20 +203,7 @@ public class ZETest_1 {
 
 		for (int i = 1; i <= n; i++) {
 
-			final ZERunnable<String> r = new ZERunnable<String>() {
-
-				@Override
-				public void run() {
-//					try {
-//						Thread.sleep(5);
-//					} catch (final InterruptedException e) {
-//						e.printStackTrace();
-//					}
-
-					x.incrementAndGet();
-//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
-				}
-			};
+			final ZERunnable<String> r = () -> x.incrementAndGet();
 
 			ze.executeByNameInASpecificThread(String.valueOf(UUID.randomUUID()), r);
 		}
@@ -222,19 +230,15 @@ public class ZETest_1 {
 		final long t1 = System.currentTimeMillis();
 
 		for (int i = 1; i <= n; i++) {
-			lll.add(new ZERunnable<String>() {
-
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(1000);
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					x.incrementAndGet();
-					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
+			lll.add(() -> {
+				try {
+					Thread.sleep(1000);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
 				}
+
+				x.incrementAndGet();
+				System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
 			});
 		}
 
@@ -265,19 +269,15 @@ public class ZETest_1 {
 		final long t1 = System.currentTimeMillis();
 
 		for (int i = 1; i <= n; i++) {
-			lll.add(new ZERunnable<String>() {
-
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(3);
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					x.incrementAndGet();
-//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
+			lll.add(() -> {
+				try {
+					Thread.sleep(3);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
 				}
+
+				x.incrementAndGet();
+				//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
 			});
 		}
 
@@ -303,31 +303,20 @@ public class ZETest_1 {
 		final AtomicInteger x =new AtomicInteger();
 		final long t1 = System.currentTimeMillis();
 		for (int i = 1; i <= n; i++) {
-//			service.execute(new Runnable() {
-//				@Override
-//				public void run() {
-//					try {
-//						Thread.sleep(3);
-//					} catch (final InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					x.incrementAndGet();
-//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
-//				}
-//			});
+			//			service.execute(new Runnable() {
+			//				@Override
+			//				public void run() {
+			//					try {
+			//						Thread.sleep(3);
+			//					} catch (final InterruptedException e) {
+			//						e.printStackTrace();
+			//					}
+			//					x.incrementAndGet();
+			//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
+			//				}
+			//			});
 
-			ze.executeInQueue(new ZERunnable<String>() {
-				@Override
-				public void run() {
-//					try {
-//						Thread.sleep(3);
-//					} catch (final InterruptedException e) {
-//						e.printStackTrace();
-//					}
-					x.incrementAndGet();
-//					System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName());
-				}
-			});
+			ze.executeInQueue(() -> x.incrementAndGet());
 
 		}
 
@@ -345,21 +334,29 @@ public class ZETest_1 {
 	public static void test_byName1() {
 		System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 				+ "ZETest_1.test_byName1()");
+		final ZE ze = ZES.newZE(4);
 
-		final ZE ze = ZES.newZE(1);
 
 		ze.executeByNameInASpecificThread("A", () ->{
-			sleepMS(100);
-			System.out.println("A");
+			sleepMS(2001);
+			System.out.println(
+					Thread.currentThread().getName() + "\t" + LocalDateTime.now() + "\t" + "ZETest_1.test_byName1()"
+							+ ""
+							+ " A");
 		});
 
 		ze.executeByNameInASpecificThread("B", () ->{
 
-			System.out.println("B");
+			System.out.println(
+					Thread.currentThread().getName() + "\t" + LocalDateTime.now() + "\t" + "ZETest_1.test_byName1()"
+							+ ""
+							+ " B");
 		});
 		ze.executeByNameInASpecificThreadPriority("C", () ->{
-
-			System.out.println("C");
+			System.out.println(
+					Thread.currentThread().getName() + "\t" + LocalDateTime.now() + "\t" + "ZETest_1.test_byName1()"
+							+ ""
+							+ " C");
 		});
 
 
@@ -376,12 +373,12 @@ public class ZETest_1 {
 		for (int i = 1; i <= n; i++) {
 
 			final Integer k = i;
-//			ze.executeByNameInASpecificThread("1", () -> {
-//
-//				sleepMS(500);
-//				System.out.println(Thread.currentThread().getName() + "\t" + "execute -500ms- " + k);
-//
-//			});
+			//			ze.executeByNameInASpecificThread("1", () -> {
+			//
+			//				sleepMS(500);
+			//				System.out.println(Thread.currentThread().getName() + "\t" + "execute -500ms- " + k);
+			//
+			//			});
 			ze.executeInQueue(() -> {
 
 				sleepMS(500);
@@ -394,7 +391,7 @@ public class ZETest_1 {
 		for (int i = 1; i <= n2; i++) {
 
 			final Integer k = i;
-//			ze.executeByNameInASpecificThread("2",() -> {
+			//			ze.executeByNameInASpecificThread("2",() -> {
 			ze.executeInQueue(() -> {
 
 				sleepMS(100);
@@ -418,7 +415,7 @@ public class ZETest_1 {
 
 		final ZETaskStep step2 = new ZETaskStep(
 				Lists.newArrayList(() -> System.out.println("2"), () -> System.out.println("3")
-				));
+						));
 
 		final ZETaskStep step3 = new ZETaskStep(Lists.newArrayList(() -> System.out.println("4")));
 
@@ -437,7 +434,7 @@ public class ZETest_1 {
 
 			@Override
 			public String call() {
-//				final int n = 20 / 0;
+				//				final int n = 20 / 0;
 				return "A" + "\t" + Thread.currentThread().getName();
 			}
 		};
@@ -473,8 +470,8 @@ public class ZETest_1 {
 			tl.add(task);
 		}
 
-//		final List<String> vl = ze.submitInQueueAndGet(tl);
-//		final List<String> vl = ze.submitImmediatelyAndGet(tl);
+		//		final List<String> vl = ze.submitInQueueAndGet(tl);
+		//		final List<String> vl = ze.submitImmediatelyAndGet(tl);
 		final List<String> vl = ze.submitInQueuePriorityAndGet(tl);
 
 		final long t2 = System.currentTimeMillis();
@@ -503,8 +500,8 @@ public class ZETest_1 {
 			}
 		};
 
-//		final String v = ze.submitInQueueAndGet(task);
-//		final String v = ze.submitInQueuePriorityAndGet(task);
+		//		final String v = ze.submitInQueueAndGet(task);
+		//		final String v = ze.submitInQueuePriorityAndGet(task);
 		final String v = ze.submitImmediatelyAndGet(task);
 
 		System.out.println("v = " + v);
@@ -585,7 +582,7 @@ public class ZETest_1 {
 
 			System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 					+ "ZETest_1.test_groouName_1()");
-			 System.out.println("A");
+			System.out.println("A");
 
 		});
 
@@ -724,7 +721,7 @@ public class ZETest_1 {
 
 		});
 		ze.executeInQueue(() -> {
-//			sleepMS(110);
+			//			sleepMS(110);
 			final String name = Thread.currentThread().getName();
 
 			System.out.println(name + "\t" + "D");
@@ -768,16 +765,16 @@ public class ZETest_1 {
 				}
 
 				final String name = Thread.currentThread().getName();
-//				System.out.println("k = " + k + "\t" + "此线程忙完了-kname = " + name);
+				//				System.out.println("k = " + k + "\t" + "此线程忙完了-kname = " + name);
 				ssss.add(k);
-//				System.out.println("已执行任务个数 = " + ssss.size());
+				//				System.out.println("已执行任务个数 = " + ssss.size());
 			});
 
 			aaa++;
 			System.out.println("派发结果 " + "i = " + i + "\t" + "execute = " + execute);
 		}
 
-//		Thread.sleep((n * sleepMS) + 200);
+		//		Thread.sleep((n * sleepMS) + 200);
 
 		System.out.println("派发结束");
 		System.out.println("派发.count = " + aaa);
@@ -925,7 +922,7 @@ public class ZETest_1 {
 			@Override
 			public String call() {
 				final int n = 20 / 0;
-//				final int n = 20;
+				//				final int n = 20;
 				return "A";
 			}
 
@@ -978,11 +975,11 @@ public class ZETest_1 {
 
 				@Override
 				public String call() {
-//					try {
-//						Thread.sleep(1);
-//					} catch (final InterruptedException e) {
-//						e.printStackTrace();
-//					}
+					//					try {
+					//						Thread.sleep(1);
+					//					} catch (final InterruptedException e) {
+					//						e.printStackTrace();
+					//					}
 					System.out.println("vvvvv");
 					return null;
 				}
@@ -993,14 +990,14 @@ public class ZETest_1 {
 
 		System.out.println("派发结束,n = " + n);
 
-//		ze.execute(new ZETask<String>() {
-//
-//			@Override
-//			public String call() {
-//				System.out.println(222);
-//				return null;
-//			}
-//		},true);
+		//		ze.execute(new ZETask<String>() {
+		//
+		//			@Override
+		//			public String call() {
+		//				System.out.println(222);
+		//				return null;
+		//			}
+		//		},true);
 
 	}
 
@@ -1011,7 +1008,7 @@ public class ZETest_1 {
 		final ZE ze = ZES.newZE(10);
 
 		final int n = 5;
-//		final int n= 10000 * 200;
+		//		final int n= 10000 * 200;
 		for (int i = 1; i <= n; i++) {
 
 			final AbstractZETask<String> task = new AbstractZETask<String>() {
@@ -1039,10 +1036,10 @@ public class ZETest_1 {
 			final ZETaskResult<String> result = ze.submitImmediately(task);
 			System.out.println("i = " + i + "\t" + "execute = " + result.isArranged());
 
-//			System.out.println(LocalDateTime.now() + "\t" + "execute");
-//			final String v = task.get(500);
-//			System.out.println(LocalDateTime.now());
-//			System.out.println(LocalDateTime.now() + "\t" + "v = " + v);
+			//			System.out.println(LocalDateTime.now() + "\t" + "execute");
+			//			final String v = task.get(500);
+			//			System.out.println(LocalDateTime.now());
+			//			System.out.println(LocalDateTime.now() + "\t" + "v = " + v);
 
 		}
 

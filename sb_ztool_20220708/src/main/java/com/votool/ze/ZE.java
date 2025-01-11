@@ -784,12 +784,12 @@ public class ZE {
 
 		// 3 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
 		final Optional<ZEThread> minTaskQueueThreadOptional = this.zetList.stream()
-				.min(Comparator.comparing(t -> t.getTaskDeque().size()));
+				.min(Comparator.comparing(ZEThread::getTaskDequeSize));
 
 		final ZEThread minTaskQueueThread = minTaskQueueThreadOptional.get();
 
 		final List<ZEThread> minTQTList = this.zetList.stream()
-				.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
+				.filter(zet -> zet.getTaskDequeSize() <= minTaskQueueThread.getTaskDequeSize())
 				.collect(Collectors.toList());
 		if (minTQTList.size() <= 1) {
 			ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, true);
@@ -869,7 +869,7 @@ public class ZE {
 
 			final List<ZEThread> minTQTList = this.zetList.stream()
 					.filter(zet -> !zet.isExecutedByName())
-					.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThread.getTaskDeque().size())
+					.filter(zet -> zet.getTaskDequeSize() <= minTaskQueueThread.getTaskDequeSize())
 					.collect(Collectors.toList());
 			if (minTQTList.size() <= 1) {
 				ZE.addTask0(minTaskQueueThread, zeTask, priorityTask, false);
@@ -935,7 +935,7 @@ public class ZE {
 	 *
 	 */
 	public synchronized ZEThread minTaskQueueThread() {
-		final Optional<ZEThread> min = this.zetList.stream().min(Comparator.comparing(t -> t.getTaskDeque().size()));
+		final Optional<ZEThread> min = this.zetList.stream().min(Comparator.comparing(ZEThread::getTaskDequeSize));
 		return min.get();
 	}
 
@@ -969,7 +969,7 @@ public class ZE {
 	 *
 	 */
 	public synchronized int taskQueueSize() {
-		final int sum = this.zetList.stream().mapToInt(zet -> zet.getTaskDeque().size()).sum();
+		final int sum = this.zetList.stream().mapToInt(ZEThread::getTaskDequeSize).sum();
 		return sum;
 	}
 
@@ -1034,7 +1034,7 @@ public class ZE {
 			// 单线程的池，不分配
 			final boolean singleThreadPool = this.isSingleThreadPool();
 			// empty或者就剩1个任务了，不重新分配了，就让它在原来线程中执行.
-			if (singleThreadPool || (zeThread.getTaskDeque().size() <= 1)) {
+			if (singleThreadPool || (zeThread.getTaskDequeSize() <= 1)) {
 				return false;
 			}
 
@@ -1054,7 +1054,7 @@ public class ZE {
 			// 2 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
 			final Optional<ZEThread> minTaskQueueThreadOptionalEBN = this.zetList.stream()
 					.filter(zet -> !zet.isExecutedByName())
-					.min(Comparator.comparing(t -> t.getTaskDeque().size()));
+					.min(Comparator.comparing(ZEThread::getTaskDequeSize));
 
 			if (minTaskQueueThreadOptionalEBN.isPresent()) {
 				final ZEThread minTaskQueueThreadEBN = minTaskQueueThreadOptionalEBN.get();
@@ -1063,7 +1063,7 @@ public class ZE {
 			}
 
 			final Optional<ZEThread> minTaskQueueThreadOptional = this.zetList.stream()
-					.min(Comparator.comparing(t -> t.getTaskDeque().size()));
+					.min(Comparator.comparing(ZEThread::getTaskDequeSize));
 			return this.extracted(zeThread, minTaskQueueThreadOptional.get());
 		}
 	}
@@ -1072,7 +1072,7 @@ public class ZE {
 	private boolean extracted(final ZEThread zeThread, final ZEThread minTaskQueueThreadEBN) {
 		final List<ZEThread> minTQTList = this.zetList.stream()
 				.filter(zet -> !zet.isExecutedByName())
-				.filter(zet -> zet.getTaskDeque().size() <= minTaskQueueThreadEBN.getTaskDeque().size())
+				.filter(zet -> zet.getTaskDequeSize() <= minTaskQueueThreadEBN.getTaskDequeSize())
 				.collect(Collectors.toList());
 		if (minTQTList.size() <= 1) {
 			this.reassign_0(zeThread, minTaskQueueThreadEBN);

@@ -230,6 +230,10 @@ final class ZEThread<T> extends Thread {
 	public BlockingDeque<ZETask<T>> getTaskDeque() {
 		return this.taskDeque;
 	}
+	
+	public int getTaskDequeSize() {
+		return this.taskDeque.size();
+	}
 
 	public boolean isExecutedByName() {
 		return this.executedByName.get();
