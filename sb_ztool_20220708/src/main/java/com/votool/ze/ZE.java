@@ -112,7 +112,7 @@ public class ZE {
 	 * @return
 	 *
 	 */
-	public synchronized <V> ZETaskResult<V> submitImmediately(final AbstractZETask<V> abstractZETask) {
+	public <V> ZETaskResult<V> submitImmediately(final AbstractZETask<V> abstractZETask) {
 		if (Objects.isNull(abstractZETask)) {
 			return new ZETaskResult<>(abstractZETask, false, false, -1);
 		}
@@ -213,7 +213,7 @@ public class ZE {
 	 * @return
 	 *
 	 */
-	public synchronized <V> ZETaskResult<V> submitInQueue(final AbstractZETask<V> abstractZETask) {
+	public <V> ZETaskResult<V> submitInQueue(final AbstractZETask<V> abstractZETask) {
 		if (Objects.isNull(abstractZETask)) {
 			return new ZETaskResult<>(abstractZETask, false, false, -1);
 		}
@@ -311,7 +311,7 @@ public class ZE {
 	 * @return
 	 *
 	 */
-	public synchronized <V> ZETaskResult<V> submitInQueuePriority(final AbstractZETask<V> abstractZETask) {
+	public <V> ZETaskResult<V> submitInQueuePriority(final AbstractZETask<V> abstractZETask) {
 		if (Objects.isNull(abstractZETask)) {
 			return new ZETaskResult<>(abstractZETask, false, false, -1);
 		}
@@ -414,7 +414,7 @@ public class ZE {
 	 * @return 返回值表示此任务是否被立即执行了
 	 *
 	 */
-	public synchronized <T> boolean executeImmediately(final ZERunnable<T> zeRunnable) {
+	public <T> boolean executeImmediately(final ZERunnable<T> zeRunnable) {
 		if (Objects.isNull(zeRunnable)) {
 			return false;
 		}
@@ -455,7 +455,7 @@ public class ZE {
 	 * @return
 	 *
 	 */
-	public synchronized <V> boolean executeInQueue(final ZERunnable<V> zeRunnable) {
+	public <V> boolean executeInQueue(final ZERunnable<V> zeRunnable) {
 		if (Objects.isNull(zeRunnable)) {
 			return false;
 		}
@@ -486,7 +486,7 @@ public class ZE {
 	 * @return
 	 *
 	 */
-	public synchronized <T> boolean executeInQueuePriority(final ZERunnable<T> zeRunnable) {
+	public <T> boolean executeInQueuePriority(final ZERunnable<T> zeRunnable) {
 		if (Objects.isNull(zeRunnable)) {
 			return false;
 		}
