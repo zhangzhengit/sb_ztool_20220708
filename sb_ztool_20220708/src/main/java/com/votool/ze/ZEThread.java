@@ -33,8 +33,6 @@ final class ZEThread<T> extends Thread {
 	 */
 	private final BlockingDeque<ZETask<T>> taskDeque = new LinkedBlockingDeque<>();
 
-	private final Object lockObject = new Object();
-
 	/**
 	 * 标识线程执行结束
 	 */
@@ -150,34 +148,24 @@ final class ZEThread<T> extends Thread {
 		// 也防止lock.wait()不设超时一直不释放锁导致 addTask 获取不到锁而无法执行.
 
 		while (!this.d.get()) {
-			if (this.taskDeque.isEmpty()) {
-				synchronized (this.lockObject) {
-					try {
-						this.lockObject.wait(WAIT_TIMEOUT);
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-
-				while (true) {
-					final ZETask<T> newTask = ZEThread.this.taskDeque.pollFirst();
-					if (newTask == null) {
-						// 当前已无任务，打破此循环，开始下一次外部循环.
-						this.setExecutedByName(false);
-						break;
-					}
-
-					final ZE ze = ZEGMap.get(this.getGroupName());
-					if (!this.isExecutedByName()) {
-						// FIXME byName方法，上面判断不生效？
-						//						ze.reassign(this);
-					}
-
-					this.task(newTask);
-				}
+			ZETask<T> newTask = null;
+			try {
+				newTask = ZEThread.this.taskDeque.take();
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (newTask == null) {
+				// 当前已无任务，打破此循环，开始下一次外部循环.
+				this.setExecutedByName(false);
+				break;
 			}
 
+			if (!this.isExecutedByName()) {
+				// FIXME byName方法，上面判断不生效？
+				//	ze.reassign(this);
+			}
+
+			this.task(newTask);
 		}
 	}
 
@@ -190,19 +178,15 @@ final class ZEThread<T> extends Thread {
 	 */
 	public void addTask(final ZETask<T> task, final boolean priorityTask) {
 
-		synchronized (this.lockObject) {
-			if (priorityTask) {
-				this.taskDeque.addFirst(task);
-			} else {
-				this.taskDeque.addLast(task);
-			}
-
-			this.setBusy(true);
-
-			this.addTaskCount.incrementAndGet();
-
-			this.lockObject.notify();
+		if (priorityTask) {
+			this.taskDeque.addFirst(task);
+		} else {
+			this.taskDeque.addLast(task);
 		}
+
+		this.setBusy(true);
+
+		this.addTaskCount.incrementAndGet();
 	}
 
 	/**
@@ -230,7 +214,7 @@ final class ZEThread<T> extends Thread {
 	public BlockingDeque<ZETask<T>> getTaskDeque() {
 		return this.taskDeque;
 	}
-	
+
 	public int getTaskDequeSize() {
 		return this.taskDeque.size();
 	}
