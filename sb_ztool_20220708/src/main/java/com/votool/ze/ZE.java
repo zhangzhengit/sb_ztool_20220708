@@ -763,30 +763,27 @@ public class ZE {
 		}
 
 		// 2 空闲线程
-		final Optional<ZEThread> o = this.zetList.stream().filter(zet -> !zet.isBusy()).findFirst();
-		if (o.isPresent()) {
-			final ZEThread t = o.get();
-			ZE.addTask0(t, zeTask, priorityTask, true);
-			this.nameMap.put(keyword, t);
-			t.setExecutedByName(true);
+		final ZEThread idleZT = ZETU.findAnyIdle(this.zetList);
+		if (idleZT != null) {
+			ZE.addTask0(idleZT, zeTask, priorityTask, true);
+			this.nameMap.put(keyword, idleZT);
+			idleZT.setExecutedByName(true);
 			return true;
 		}
+
 		if (this.newThread()) {
-			final Optional<ZEThread> o2 = this.zetList.stream().filter(zet -> !zet.isBusy()).findFirst();
-			if (o2.isPresent()) {
-				final ZEThread t = o2.get();
-				ZE.addTask0(t, zeTask, priorityTask, true);
-				this.nameMap.put(keyword, t);
-				t.setExecutedByName(true);
+			final ZEThread idleZT2 = ZETU.findAnyIdle(this.zetList);
+			if (idleZT2 != null) {
+				ZE.addTask0(idleZT2, zeTask, priorityTask, true);
+				this.nameMap.put(keyword, idleZT2);
+				idleZT2.setExecutedByName(true);
 				return true;
 			}
 		}
 
 		// 3 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
-		final Optional<ZEThread> minTaskQueueThreadOptional = this.zetList.stream()
-				.min(Comparator.comparing(ZEThread::getTaskDequeSize));
 
-		final ZEThread minTaskQueueThread = minTaskQueueThreadOptional.get();
+		final ZEThread minTaskQueueThread = ZETU.getMinTaskQueueSize(this.zetList);
 
 		final List<ZEThread> minTQTList = this.zetList.stream()
 				.filter(zet -> zet.getTaskDequeSize() <= minTaskQueueThread.getTaskDequeSize())
