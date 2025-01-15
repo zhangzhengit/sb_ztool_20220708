@@ -78,6 +78,7 @@ public class ZE {
 
 	private final int threadSize;
 	private final String groupName;
+	private final ThreadGroup g;
 	private final String threadNamePrefix;
 
 	// FIXME 2022年12月5日 上午1:28:52 zhanghen: 任务编排，如果： 1 2 3 4 ,2和3要1执行以后才可执行，
@@ -1104,8 +1105,10 @@ public class ZE {
 			final ThreadModeEnum threadMode) {
 		final int size = threadSize <= 0 ? Runtime.getRuntime().availableProcessors() : threadSize;
 
+
 		this.threadSize = size;
 		this.groupName = StrUtil.isEmpty(groupName) ? DEFAULT_GROUP_NAME_PREFIX : groupName;
+		this.g = new ThreadGroup(this.groupName);
 		this.threadNamePrefix = StrUtil.isEmpty(threadNamePrefix) ? ZEThread.PREFIX : threadNamePrefix;
 
 		switch (threadMode) {
@@ -1136,12 +1139,13 @@ public class ZE {
 	 */
 	private synchronized boolean newThread() {
 
+
 		final int n = this.threadNum.incrementAndGet();
 		if (n > this.threadSize) {
 			return false;
 		}
 		final String threadName = this.threadNamePrefix + n;
-		final ZEThread zet = new ZEThread<>(false, this.groupName, threadName);
+		final ZEThread zet = new ZEThread<>(this.g, false, this.groupName, threadName);
 		zet.start();
 		this.zetList.add(zet);
 

@@ -66,7 +66,9 @@ final class ZEThread<T> extends Thread {
 	@Setter
 	private boolean busy = false;
 
-	ZEThread(final boolean busy, final String groupName,final String threadName) {
+
+	ZEThread(final ThreadGroup threadGroup, final boolean busy,final String groupName, final String threadName) {
+		super(threadGroup, groupName + "@" + threadName);
 		this.busy = busy;
 
 		this.groupName = groupName;
