@@ -785,6 +785,10 @@ public class ZE {
 		// 3 任务队列最短的,就一个则addTask，有多个则取平均耗时最少的
 
 		final ZEThread minTaskQueueThread = ZETU.getMinTaskQueueSize(this.zetList);
+		if (minTaskQueueThread == null) {
+			ZE.addTask0(this.getFirstThread(), zeTask, priorityTask, false);
+			return true;
+		}
 
 		final List<ZEThread> minTQTList = this.zetList.stream()
 				.filter(zet -> zet.getTaskDequeSize() <= minTaskQueueThread.getTaskDequeSize())
