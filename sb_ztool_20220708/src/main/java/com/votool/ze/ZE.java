@@ -424,6 +424,32 @@ public class ZE {
 	}
 
 	/**
+	 * 获取一个空闲的线程
+	 * @return
+	 */
+	public ZEThread getAnIdleThread() {
+
+		final ZEThread findFirstIdleAndNotExecutedByName = ZETU.findFirstIdleAndNotExecutedByName(this.zetList);
+		if (findFirstIdleAndNotExecutedByName != null) {
+			return findFirstIdleAndNotExecutedByName;
+		}
+
+		final ZEThread findAnyIdle = ZETU.findAnyIdle(this.zetList);
+		if (findAnyIdle != null) {
+			return findAnyIdle;
+		}
+
+		if (this.newThread()) {
+			final ZEThread findAnyIdle2 = ZETU.findAnyIdle(this.zetList);
+			if (findAnyIdle2 != null) {
+				return findAnyIdle2;
+			}
+		}
+
+		return this.getFirstThread();
+	}
+
+	/**
 	 * 用空闲线程立即执行一组任务，有空闲线程则执行并返回true，无空闲线程则不执行并返回false
 	 *
 	 * @param <T>

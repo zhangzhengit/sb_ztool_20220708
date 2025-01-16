@@ -16,15 +16,12 @@ import lombok.Setter;
  * @date 2022年11月29日
  *
  */
-final class ZEThread<T> extends Thread {
-
-	private static final int WAIT_TIMEOUT = 100;
+public final class ZEThread<T> extends Thread {
 
 	@Getter
 	private final String groupName;
 
 	public static final String PREFIX = "ze-Thread-";
-
 
 	/**
 	 * 此线程的任务队列，默认按addLast来分配任务，用pollFirst来执行任务;
