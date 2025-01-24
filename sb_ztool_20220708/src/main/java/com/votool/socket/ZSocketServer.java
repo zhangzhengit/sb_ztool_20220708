@@ -17,9 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.votool.common.ZPU;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * Server端，与Client使用定长协议体，一个对象序列化后的字节数组为定长4字节+4字节的byte数组表示的长度的数据
  *
@@ -29,8 +26,6 @@ import lombok.Getter;
  * @date 2023年9月4日
  *
  */
-@Getter
-@AllArgsConstructor
 public abstract class ZSocketServer<T> extends Thread {
 
 	private final Integer port;
@@ -235,6 +230,20 @@ public abstract class ZSocketServer<T> extends Thread {
 				}
 			}
 		}
+	}
+
+	public Integer getPort() {
+		return port;
+	}
+
+	public String getThreadName() {
+		return threadName;
+	}
+
+	public ZSocketServer(Integer port, String threadName) {
+		super();
+		this.port = port;
+		this.threadName = threadName;
 	}
 
 }

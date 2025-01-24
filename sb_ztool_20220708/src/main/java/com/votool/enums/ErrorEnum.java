@@ -1,8 +1,5 @@
 package com.votool.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  *
  *
@@ -10,8 +7,6 @@ import lombok.Getter;
  * @date 2020-12-09 11:07:04
  *
  */
-@Getter
-@AllArgsConstructor
 public enum ErrorEnum {
 
 	OK(0, "OK"),
@@ -23,7 +18,21 @@ public enum ErrorEnum {
 
 	;
 
-	private int code;
-	private String message;
+	private final int code;
+	private final String message;
+
+	public int getCode() {
+		return code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	private ErrorEnum(int code, String message) {
+		this.code = code;
+		this.message = message;
+	}
 
 }
+

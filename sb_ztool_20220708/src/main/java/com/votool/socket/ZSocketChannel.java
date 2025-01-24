@@ -7,9 +7,6 @@ import java.nio.channels.SocketChannel;
 
 import com.votool.common.ZPU;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  *
  *
@@ -17,8 +14,6 @@ import lombok.Getter;
  * @date 2023年9月4日
  *
  */
-@Getter
-@AllArgsConstructor
 public class ZSocketChannel {
 
 	private final SocketChannel socketChannel;
@@ -41,6 +36,11 @@ public class ZSocketChannel {
 				}
 			}
 		}
+	}
+
+	public ZSocketChannel(SocketChannel socketChannel) {
+		super();
+		this.socketChannel = socketChannel;
 	}
 
 //	/**

@@ -1,8 +1,5 @@
 package com.votool.ze;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 /**
  *
  * ZERunnable 的 结果
@@ -11,8 +8,6 @@ import lombok.Data;
  * @date 2022年12月2日
  *
  */
-@Data
-@AllArgsConstructor
 public class ZERunnableResult {
 
 	/**
@@ -24,5 +19,11 @@ public class ZERunnableResult {
 	 * 当前 ZERunnable 是否被安排了执行
 	 */
 	private final boolean executed;
+
+	public ZERunnableResult(int index, boolean executed) {
+		super();
+		this.index = index;
+		this.executed = executed;
+	}
 
 }

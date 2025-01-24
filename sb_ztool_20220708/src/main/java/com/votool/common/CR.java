@@ -4,11 +4,6 @@ import java.io.Serializable;
 
 import com.votool.enums.ErrorEnum;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * 统一返回
  *
@@ -18,10 +13,6 @@ import lombok.NoArgsConstructor;
  * @date 2020-12-08 13:41:18
  * 
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class CR<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,6 +35,7 @@ public class CR<T> implements Serializable {
 		this.setRedirectURL(redirectURL);
 		return this;
 	}
+	
 	
 	public static <T> CR<T> ok() {
 		final CR<T> cr = new CR<>();
@@ -77,6 +69,50 @@ public class CR<T> implements Serializable {
 		cr.setCode(CODE_ERROR);
 		cr.setMessage(message);
 		return cr;
-	} 
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getRedirectURL() {
+		return redirectURL;
+	}
+
+	public void setRedirectURL(String redirectURL) {
+		this.redirectURL = redirectURL;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	public CR(int code, String message, String redirectURL, T data) {
+		super();
+		this.code = code;
+		this.message = message;
+		this.redirectURL = redirectURL;
+		this.data = data;
+	}
+	
+	public CR() {
+	}
+	
 
 }

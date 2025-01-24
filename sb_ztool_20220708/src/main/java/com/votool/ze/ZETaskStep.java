@@ -2,9 +2,6 @@ package com.votool.ze;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 /**
  * 用于编排任务如何执行.
  * 如：
@@ -18,13 +15,20 @@ import lombok.Data;
  * @date 2022年12月5日
  *
  */
-@Data
-@AllArgsConstructor
 public class ZETaskStep {
 
 	/**
 	 * 一组任务
 	 */
 	private final List<ZERunnable> zeRunnableList;
+
+	public List<ZERunnable> getZeRunnableList() {
+		return zeRunnableList;
+	}
+
+	public ZETaskStep(List<ZERunnable> zeRunnableList) {
+		super();
+		this.zeRunnableList = zeRunnableList;
+	}
 
 }

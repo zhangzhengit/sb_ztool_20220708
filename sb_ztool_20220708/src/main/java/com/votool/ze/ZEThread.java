@@ -6,9 +6,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * 一个线程
  *
@@ -18,8 +15,11 @@ import lombok.Setter;
  */
 public final class ZEThread<T> extends Thread {
 
-	@Getter
 	private final String groupName;
+
+	public String getGroupName() {
+		return groupName;
+	}
 
 	public static final String PREFIX = "ze-Thread-";
 
@@ -59,8 +59,6 @@ public final class ZEThread<T> extends Thread {
 	/**
 	 * 标记此线程是否忙碌
 	 */
-	@Getter
-	@Setter
 	private boolean busy = false;
 
 
@@ -71,6 +69,15 @@ public final class ZEThread<T> extends Thread {
 		this.groupName = groupName;
 
 		this.setName(groupName + "@" + threadName);
+	}
+
+	public boolean isBusy() {
+		return busy;
+	}
+
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
 	}
 
 

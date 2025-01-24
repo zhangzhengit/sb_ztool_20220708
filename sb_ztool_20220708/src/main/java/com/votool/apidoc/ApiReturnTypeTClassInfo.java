@@ -1,9 +1,5 @@
 package com.votool.apidoc;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  *
  *
@@ -11,11 +7,35 @@ import lombok.NoArgsConstructor;
  * @date 2022年8月14日
  *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ApiReturnTypeTClassInfo {
 
 	private String className;
 	private String json;
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
+
+	public ApiReturnTypeTClassInfo(String className, String json) {
+		super();
+		this.className = className;
+		this.json = json;
+	}
+
+	public ApiReturnTypeTClassInfo() {
+		super();
+	}
+	
 }

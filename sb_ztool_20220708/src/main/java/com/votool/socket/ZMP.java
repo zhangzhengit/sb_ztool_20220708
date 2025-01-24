@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  *
@@ -16,10 +12,6 @@ import lombok.NoArgsConstructor;
  * @data Aug 7, 2020
  *
  */
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ZMP implements Serializable, Delayed {
 
 	private static final long serialVersionUID = 1L;

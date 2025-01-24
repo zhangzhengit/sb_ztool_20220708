@@ -1,7 +1,5 @@
 package com.votool.exception;
 
-import lombok.Getter;
-
 /**
  *
  *
@@ -13,9 +11,13 @@ public class NotLoginException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 
-	@Getter
 	private final Integer code;
 	private final String message;
+
+	public Integer getCode() {
+		return code;
+	}
+
 
 
 	public NotLoginException(final Integer code, final String message) {

@@ -1,8 +1,5 @@
 package com.votool.ze;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * ze.submitXXX(AbstractZETask) 方法的返回结果，用于获取Task的执行结果等
  *
@@ -10,8 +7,6 @@ import lombok.NoArgsConstructor;
  * @date 2022年12月2日
  *
  */
-@Data
-@NoArgsConstructor
 public class ZETaskResult<V> {
 
 	/**
@@ -76,6 +71,38 @@ public class ZETaskResult<V> {
 		this.timeConsumedMS = timeConsumedMS;
 
 		RMap.put(this.getTask(), this);
+	}
+
+	public AbstractZETask<V> getTask() {
+		return task;
+	}
+
+	public void setTask(AbstractZETask<V> task) {
+		this.task = task;
+	}
+
+	public boolean isArranged() {
+		return arranged;
+	}
+
+	public void setArranged(boolean arranged) {
+		this.arranged = arranged;
+	}
+
+	public boolean isExecuted() {
+		return executed;
+	}
+
+	public void setExecuted(boolean executed) {
+		this.executed = executed;
+	}
+
+	public long getTimeConsumedMS() {
+		return timeConsumedMS;
+	}
+
+	public void setTimeConsumedMS(long timeConsumedMS) {
+		this.timeConsumedMS = timeConsumedMS;
 	}
 
 }

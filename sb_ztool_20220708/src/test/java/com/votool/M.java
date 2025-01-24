@@ -2,10 +2,6 @@ package com.votool;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  *
  *
@@ -13,13 +9,15 @@ import lombok.NoArgsConstructor;
  * @date 2022年11月29日
  *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class M implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String name;
+
+	public M(String name) {
+		super();
+		this.name = name;
+	}
 
 }

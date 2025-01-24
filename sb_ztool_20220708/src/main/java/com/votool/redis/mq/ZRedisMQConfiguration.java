@@ -8,10 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * zredis-mq 配置项
  *
@@ -19,9 +15,6 @@ import lombok.NoArgsConstructor;
  * @date 2022年11月24日
  *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Configuration
 @Validated
 @ConfigurationProperties(prefix = "zmq")
@@ -36,4 +29,29 @@ public class ZRedisMQConfiguration {
 
 	@NotEmpty(message = "zmq.threadNamePrefix 不能配置为空")
 	private String threadNamePrefix = "z-redis-mq-Thread-";
+
+	public String getTopicPrefix() {
+		return topicPrefix;
+	}
+
+	public void setTopicPrefix(String topicPrefix) {
+		this.topicPrefix = topicPrefix;
+	}
+
+	public Integer getMaxThreadSize() {
+		return maxThreadSize;
+	}
+
+	public void setMaxThreadSize(Integer maxThreadSize) {
+		this.maxThreadSize = maxThreadSize;
+	}
+
+	public String getThreadNamePrefix() {
+		return threadNamePrefix;
+	}
+
+	public void setThreadNamePrefix(String threadNamePrefix) {
+		this.threadNamePrefix = threadNamePrefix;
+	}
+	
 }

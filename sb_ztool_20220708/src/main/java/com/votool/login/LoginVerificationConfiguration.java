@@ -8,10 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Lists;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  *
  *
@@ -19,9 +15,6 @@ import lombok.NoArgsConstructor;
  * @date 2022年7月8日
  *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Configuration
 @ConfigurationProperties(value = "login.verification")
 public class LoginVerificationConfiguration {
@@ -54,5 +47,37 @@ public class LoginVerificationConfiguration {
 					"/user/tologin",
 					"/static/**"
 			));
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public Integer getMinute() {
+		return minute;
+	}
+
+	public void setMinute(Integer minute) {
+		this.minute = minute;
+	}
+
+	public Set<String> getPathPatterns() {
+		return pathPatterns;
+	}
+
+	public void setPathPatterns(Set<String> pathPatterns) {
+		this.pathPatterns = pathPatterns;
+	}
+
+	public Set<String> getExcludePathPatterns() {
+		return excludePathPatterns;
+	}
+
+	public void setExcludePathPatterns(Set<String> excludePathPatterns) {
+		this.excludePathPatterns = excludePathPatterns;
+	}
 
 }

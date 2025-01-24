@@ -3,10 +3,6 @@ package com.votool.redis.mq;
 import java.io.Serializable;
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * 消息协议体
  *
@@ -14,9 +10,6 @@ import lombok.NoArgsConstructor;
  * @date 2022年8月18日
  *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class MessageBody implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,4 +31,37 @@ public class MessageBody implements Serializable {
 	 */
 	private Object body;
 
+	public String getMessageId() {
+		return messageId;
+	}
+
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+
+	public Date getConsumeTime() {
+		return consumeTime;
+	}
+
+	public void setConsumeTime(Date consumeTime) {
+		this.consumeTime = consumeTime;
+	}
+
+	public Object getBody() {
+		return body;
+	}
+
+	public void setBody(Object body) {
+		this.body = body;
+	}
+
+	
 }

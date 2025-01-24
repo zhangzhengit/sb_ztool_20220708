@@ -3,8 +3,6 @@ package com.votool.ze;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import lombok.Getter;
-
 /**
  * ZE 线程池的带返回值的任务对象.
  * --------------------------------------------------------------------
@@ -30,11 +28,11 @@ import lombok.Getter;
  */
 public abstract class AbstractZETask<V> implements ZEOnException, ZEOnSuccess<V>, ZETask<V> {
 
-	@Getter
 	private final AtomicBoolean isDone = new AtomicBoolean(false);
 	private final AtomicBoolean e = new AtomicBoolean(false);
 
-	@Getter
+	
+	
 	private final AtomicReference<V> resultReference = new AtomicReference<>();
 
 	/**
@@ -114,4 +112,17 @@ public abstract class AbstractZETask<V> implements ZEOnException, ZEOnSuccess<V>
 			e.printStackTrace();
 		}
 	}
+
+	public AtomicBoolean getIsDone() {
+		return isDone;
+	}
+
+	public AtomicBoolean getE() {
+		return e;
+	}
+
+	public AtomicReference<V> getResultReference() {
+		return resultReference;
+	}
+	
 }
